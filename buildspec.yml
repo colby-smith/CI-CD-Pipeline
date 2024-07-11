@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - mkdir -p output
+      - cp -r content/* output/
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: output
