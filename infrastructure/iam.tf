@@ -30,16 +30,32 @@ resource "aws_iam_role" "codebuild_role" {
   })
 }
 
-resource "aws_iam_policy" "codestar_connections_policy" {
-  name        = "CodeStarConnectionsPolicy"
-  description = "Policy to allow CodeStar Connections actions"
+resource "aws_iam_policy" "codebuild_policy" {
+  name        = "CodeBuildPolicy"
   policy      = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
         Effect   = "Allow"
         Action   = [
-          "codestar-connections:UseConnection"
+          "*"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "pipeline_connections_policy" {
+  name        = "PipelineConnectionsPolicy"
+  description = "Policy to allow CodePipeline Connections actions"
+  policy      = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = [
+          "*"
         ]
         Resource = "*"
       }
@@ -59,19 +75,12 @@ resource "aws_iam_policy_attachment" "codepipeline_s3_policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "codestar_connections_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "pipeline_connections_policy_attachment" {
   role       = aws_iam_role.codepipeline_role.name
-  policy_arn = aws_iam_policy.codestar_connections_policy.arn
+  policy_arn = aws_iam_policy.pipeline_connections_policy.arn
 }
 
-resource "aws_iam_policy_attachment" "codebuild_policy_attachment" {
-  name       = "codebuild_policy_attachment"
-  roles      = [aws_iam_role.codebuild_role.name]
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
-}
-
-resource "aws_iam_policy_attachment" "codebuild_s3_policy_attachment" {
-  name       = "codebuild_s3_policy_attachment"
-  roles      = [aws_iam_role.codebuild_role.name]
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
+resource "aws_iam_role_policy_attachment" "codebuild_s3_policy_attachment" {
+  role      = aws_iam_role.codebuild_role.name
+  policy_arn = aws_iam_policy.codebuild_policy.arn
+} 

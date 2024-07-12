@@ -11,7 +11,7 @@ resource "aws_codepipeline" "codepipeline" {
     name = "Source"
 
     action {
-      name             = "GitHub_Source"
+      name             = "CodeConnection_Source"
       category         = "Source"
       owner            = "AWS"
       provider         = "CodeStarSourceConnection"
@@ -19,7 +19,7 @@ resource "aws_codepipeline" "codepipeline" {
       output_artifacts = ["source_output"]
 
       configuration = {
-        ConnectionArn    = "arn:aws:codestar-connections:eu-west-1:905418352433:connection/e6bfcad5-e43e-418f-a8c4-e9d8bd7fcc65"
+        ConnectionArn    = "arn:aws:codeconnections:eu-west-1:905418352433:connection/3141d639-12bf-422e-a02d-7d20dafc0b4a"
         FullRepositoryId = "Colby-Smith/Personal-Site"
         BranchName       = "main"
       }
